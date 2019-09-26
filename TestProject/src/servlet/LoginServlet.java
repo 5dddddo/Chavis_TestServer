@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,12 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import connectDB.ConnectDB;
+import vo.ClientVO;
 
-@WebServlet("/test")
-public class testServlet extends HttpServlet {
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public testServlet() {
+	public LoginServlet() {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -25,12 +27,11 @@ public class testServlet extends HttpServlet {
 		String id = request.getParameter("id");
 		String pw = request.getParameter("pw");
 
-		ConnectDB db = new ConnectDB();
-	
-		String res = db.connectionDB(id, pw);
-
+		ConnectDB db = ConnectDB.getInstance();
+		id = "oea0805";
+		pw = "1234";
+		ClientVO res = db.Login(id, pw);
 		System.out.println(res);
-
 		out.println(res);
 
 //		ObjectMapper mapper = new ObjectMapper();
