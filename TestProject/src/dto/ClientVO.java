@@ -1,8 +1,12 @@
-package vo;
+package dto;
 
-import sun.rmi.runtime.Log;
+import java.io.Serializable;
 
-public class ClientVO {
+public class ClientVO implements Serializable {
+	// 직렬화와 역직렬화를 할 때 같은 타입인지를
+	// 비교하기 위해서 내부적으로 사용
+	private static final long serialVersionUID = 1L;
+
 	private String CLIENT_NUM;
 	private String CLIENT_NAME;
 	private String CLIENT_ID;
