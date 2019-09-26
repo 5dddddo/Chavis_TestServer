@@ -34,5 +34,9 @@ public class ConnectDB {
 		return con;
 	}
 
+	public ClientVO Login(String id, String pw) {
+		return null;
+	}
+
 
 }

@@ -63,9 +63,11 @@ public class ClientDAO {
 	public ClientVO login(String id, String pw) {
 		ClientVO vo = new ClientVO();
 		String sql = "SELECT * FROM client";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
-			PreparedStatement pstmt = con.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				vo.setCLIENT_ID(rs.getString("client_id"));
 				vo.setCLIENT_NUM(rs.getString("client_num"));
@@ -83,9 +85,9 @@ public class ClientDAO {
 					pstmt.close();
 				} catch (SQLException ex) {
 				}
-			if (conn != null)
+			if (con != null)
 				try {
-					conn.close();
+					con.close();
 				} catch (SQLException ex) {
 				}
 		}

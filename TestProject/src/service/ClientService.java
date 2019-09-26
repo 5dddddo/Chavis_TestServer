@@ -11,6 +11,7 @@ import dto.ClientVO;
 public class ClientService {
 	
 	public List<ClientVO> login(String id,String pw) {
+		List<ClientVO> list = null;
 		Connection con = null;
 		ClientVO vo = null;
 		try {
