@@ -73,6 +73,8 @@ local.properties
 
 ### Java-Web ###
 
+.class
+
 ## ignoring target file
 target/
 
