@@ -15,7 +15,6 @@ local.properties
 .loadpath
 .recommenders
 
-build/
 
 # External tool builders
 .externalToolBuilders/
@@ -75,7 +74,6 @@ build/
 
 ### Java-Web ###
 
-.class
 
 ## ignoring target file
 target/
