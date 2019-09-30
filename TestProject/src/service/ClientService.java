@@ -6,17 +6,18 @@ import java.util.List;
 
 import dao.ClientDAO;
 import dto.ClientVO;
+import dto.ReservationVO;
 
 // service 객체를 만들기 위한 class
 public class ClientService {
-	
-	public List<ClientVO> login(String id,String pw) {
+
+	public ClientVO login(String id, String pw) {
 		Connection con = null;
 		ClientVO vo = null;
 		try {
 			con = commonDB.ConnectDB.getConnection();
 			ClientDAO dao = new ClientDAO(con);
-			vo = dao.login(id,pw);
+			vo = dao.login(id, pw);
 			if (vo != null) {
 				con.commit();
 			} else {
@@ -31,16 +32,16 @@ public class ClientService {
 				System.out.println(e);
 			}
 		}
-		return list;
+		return vo;
 	}
 
-	public List<ClientVO> getClientList(String keyword) {
+	public List<ReservationVO> getClientList(String keyword) {
 		Connection con = null;
-		List<ClientVO> list = null;
+		List<ReservationVO> list = null;
 		try {
 			con = commonDB.ConnectDB.getConnection();
 			ClientDAO dao = new ClientDAO(con);
-			list = dao.selectClient(keyword);
+			list = dao.getClientList(keyword);
 			if (list != null) {
 				con.commit();
 			} else {

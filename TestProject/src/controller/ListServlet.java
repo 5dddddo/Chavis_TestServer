@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,13 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dto.ClientVO;
+import dto.ReservationVO;
 import service.ClientService;
 
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/list.do")
+public class ListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public LoginServlet() {
+	public ListServlet() {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,12 +28,11 @@ public class LoginServlet extends HttpServlet {
 		response.setContentType("text/plain; charset=utf8");
 		PrintWriter out = response.getWriter();
 		String id = request.getParameter("id");
-		String pw = request.getParameter("pw");
-		System.out.println(id + "  " + pw);
+//		System.out.println(id + "  " + pw);
 		ClientService service = new ClientService();
 		ObjectMapper mapper = new ObjectMapper();
 
-		ClientVO res = service.login(id, pw);
+		List<ReservationVO> res = service.getClientList(id);
 
 		String json = mapper.writeValueAsString(res);
 		System.out.println(json);

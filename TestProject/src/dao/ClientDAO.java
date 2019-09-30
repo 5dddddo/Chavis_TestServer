@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.ClientVO;
-
+import dto.ReservationVO;
 
 public class ClientDAO {
 
@@ -23,12 +23,12 @@ public class ClientDAO {
 		this.con = con;
 	}
 
-	public List<ClientVO> getClientList(String keyword) {
+	public List<ReservationVO> getClientList(String keyword) {
 		// keyword를 입력 받아서 DB 검색해서
 		// String[] 만들어서 return 해주는 DB 처리
 		// logic 나오면 안 됨!
 
-		List<ClientVO> list = new ArrayList<ClientVO>();
+		List<ReservationVO> list = new ArrayList<ReservationVO>();
 		try {
 			// 상당히 로드가 많이 걸리는 JDBC 작업 -> 비효율적
 			// Connection Pool을 사용하는 코드로 재작성
@@ -39,17 +39,24 @@ public class ClientDAO {
 			// 사용자가 늘어나도 load가 커지지 않음
 
 			// 3. Statement 생성
-			String sql = "select * from reservation";
+			String sql = "select * from reservation where client_id = ?";
 			PreparedStatement pstmt = con.prepareStatement(sql);
-
+			pstmt.setString(1,keyword);
 			// 4. Query 설정
 			ResultSet rs = pstmt.executeQuery();
-
+			
 			// 5. 결과 처리
 			while (rs.next()) {
-				list.add(rs.getString("btitle"));
+				ReservationVO vo=new ReservationVO();
+				vo.setRESERVE_ID(rs.getString("RESERVE_ID"));
+				vo.setCLIENT_ID(rs.getString("CLIENT_ID"));
+				vo.setKEY(rs.getString("KEY"));
+				vo.setRESERVE_TIME(rs.getString("RESERVE_TIME"));
+				vo.setKEY_EXPIRE_TIME(rs.getString("KEY_EXPIRE_TIME"));
+				vo.setREPAIR_TIME(rs.getString("REPAIR_TIME"));
+				vo.setBODYSHOP_ID(rs.getString("BODYSHOP_ID"));
+				list.add(vo);
 			}
-
 			// 6. 사용한 resource 해제
 			rs.close();
 			pstmt.close();
@@ -60,13 +67,21 @@ public class ClientDAO {
 		return list;
 	}
 
+
 	public ClientVO login(String id, String pw) {
-		ClientVO vo = new ClientVO();
-		String sql = "SELECT * FROM client";
+		ClientVO vo = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
 		try {
-			PreparedStatement pstmt = con.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();
+			sql = "SELECT * FROM client where client_id = ? and password = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, pw);
+			rs = pstmt.executeQuery();
+			
 			while (rs.next()) {
+				vo = new ClientVO();
 				vo.setCLIENT_ID(rs.getString("client_id"));
 				vo.setCLIENT_NUM(rs.getString("client_num"));
 				vo.setCLIENT_NAME(rs.getString("client_name"));
@@ -78,18 +93,61 @@ public class ClientDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (pstmt != null)
+			if (pstmt != null) {
 				try {
 					pstmt.close();
-				} catch (SQLException ex) {
+				} catch (SQLException e) {
 				}
-			if (conn != null)
+			}
+			if (con != null) {
 				try {
-					conn.close();
-				} catch (SQLException ex) {
+					System.out.println("login 연결 끊기 성공");
+					con.close();
+				} catch (SQLException e) {
+					System.out.println("login 연결 끊기 실패");
 				}
+			}
 		}
 		return vo;
 	}
-	
+
+//	public boolean register(ClientVO vo) {
+//		boolean flag = false;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//
+//		String sql = "INSERT INTO CLIENT (CLIENT_ID,CLIENT_NUM,CLIENT_NAME,CAR_TYPE,CAR_ID,TEL,PASSWORD) ;
+//		try {
+//			pstmt = con.prepareStatement(sql);
+//
+//			rs = pstmt.executeQuery();
+//			while (rs.next()) {
+//				vo.setCLIENT_ID(rs.getString("client_id"));
+//				vo.setCLIENT_NUM(rs.getString("client_num"));
+//				vo.setCLIENT_NAME(rs.getString("client_name"));
+//				vo.setCAR_TYPE(rs.getString("car_type"));
+//				vo.setCAR_ID(rs.getString("car_id"));
+//				vo.setTEL(rs.getString("tel"));
+//				vo.setPASSWORD(rs.getString("password"));
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			if (pstmt != null)
+//				try {
+//					pstmt.close();
+//				} catch (SQLException e) {
+//				}
+//			if (con != null) {
+//				try {
+//					System.out.println("login 연결 끊기 성공");
+//					con.close();
+//				} catch (SQLException e) {
+//					System.out.println("login 연결 끊기 실패");
+//				}
+//
+//			}
+//		}
+//		return flag;
+//	}
 }
