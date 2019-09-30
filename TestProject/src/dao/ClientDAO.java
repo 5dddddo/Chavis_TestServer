@@ -41,13 +41,13 @@ public class ClientDAO {
 			// 3. Statement 생성
 			String sql = "select * from reservation where client_id = ?";
 			PreparedStatement pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,keyword);
+			pstmt.setString(1, keyword);
 			// 4. Query 설정
 			ResultSet rs = pstmt.executeQuery();
-			
+
 			// 5. 결과 처리
 			while (rs.next()) {
-				ReservationVO vo=new ReservationVO();
+				ReservationVO vo = new ReservationVO();
 				vo.setRESERVE_ID(rs.getString("RESERVE_ID"));
 				vo.setCLIENT_ID(rs.getString("CLIENT_ID"));
 				vo.setKEY(rs.getString("KEY"));
@@ -67,19 +67,20 @@ public class ClientDAO {
 		return list;
 	}
 
-
 	public ClientVO login(String id, String pw) {
+
 		ClientVO vo = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
+
 		try {
+
 			sql = "SELECT * FROM client where client_id = ? and password = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
 			rs = pstmt.executeQuery();
-			
 			while (rs.next()) {
 				vo = new ClientVO();
 				vo.setCLIENT_ID(rs.getString("client_id"));
@@ -98,6 +99,7 @@ public class ClientDAO {
 					pstmt.close();
 				} catch (SQLException e) {
 				}
+
 			}
 			if (con != null) {
 				try {
