@@ -5,22 +5,26 @@ import java.sql.SQLException;
 import java.util.List;
 
 import dao.ClientDAO;
+import dao.ReservationDAO;
 import dto.BodyShopVO;
 import dto.ClientVO;
+import dto.ReservationListVO;
 import dto.ReservationVO;
 
 // service 객체를 만들기 위한 class
-public class ClientService {
-	public ClientVO login(String id, String pw) {
+public class BodyshopService {
+
+	public BodyShopVO bodyshoplogin(String id, String pw) {
 		Connection con = null;
-		ClientVO vo = null;
+		BodyShopVO vo = null;
 		try {
 			con = commonDB.ConnectDB.getConnection();
-			ClientDAO dao = new ClientDAO(con);
-			vo = dao.login(id, pw);
+			ReservationDAO dao = new ReservationDAO(con);
+			vo = dao.bodyshoplogin(id, pw);
 			if (vo != null) {
 				con.commit();
 			} else {
+				vo.setBodyshop_num("0");
 				con.rollback();
 			}
 		} catch (Exception e) {
@@ -34,17 +38,17 @@ public class ClientService {
 		}
 		return vo;
 	}
-
-	public List<ReservationVO> getClientList(String keyword) {
+	public List<ReservationListVO> getReserveList(String id) {
 		Connection con = null;
-		List<ReservationVO> list = null;
+		List<ReservationListVO> list = null;
 		try {
 			con = commonDB.ConnectDB.getConnection();
-			ClientDAO dao = new ClientDAO(con);
-			list = dao.getClientList(keyword);
-			if (list != null) {
+			ReservationDAO dao = new ReservationDAO(con);
+			list = dao.getReserveList(id);
+			if (id != null) {
 				con.commit();
 			} else {
+//				id.setBodyshop_num("0");
 				con.rollback();
 			}
 		} catch (Exception e) {
@@ -58,6 +62,4 @@ public class ClientService {
 		}
 		return list;
 	}
-
-
 }

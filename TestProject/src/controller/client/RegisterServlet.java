@@ -1,4 +1,4 @@
-package controller;
+package controller.client;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,13 +32,6 @@ public class RegisterServlet extends HttpServlet {
 		ClientService service = new ClientService();
 		ObjectMapper mapper = new ObjectMapper();
 		ClientVO vo = mapper.readValue(json, ClientVO.class);
-//		int res = service.register(vo);
-
-//		System.out.println(res);
-//		out.println(res);
-
-//		ObjectMapper mapper = new ObjectMapper();
-//		String json = mapper.writeValueAsString(result);
 
 		// 데이터 보내기
 		out.flush();

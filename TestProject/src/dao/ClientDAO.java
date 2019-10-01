@@ -40,7 +40,7 @@ public class ClientDAO {
 			// 사용자가 늘어나도 load가 커지지 않음
 
 			// 3. Statement 생성
-			String sql = "select * from reservation where client_id = ?";
+			String sql = "SELECT * FROM RESERVATION WHERE CLIENT_ID = ? ORDER BY reserve_id";
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, keyword);
 			// 4. Query 설정
@@ -52,9 +52,9 @@ public class ClientDAO {
 				vo.setRESERVE_ID(rs.getString("RESERVE_ID"));
 				vo.setCLIENT_ID(rs.getString("CLIENT_ID"));
 				vo.setKEY(rs.getString("KEY"));
-				vo.setRESERVE_TIME(rs.getString("RESERVE_TIME"));
-				vo.setKEY_EXPIRE_TIME(rs.getString("KEY_EXPIRE_TIME"));
-				vo.setREPAIR_TIME(rs.getString("REPAIR_TIME"));
+				vo.setRESERVE_TIME(rs.getDate("RESERVE_TIME"));
+				vo.setKEY_EXPIRE_TIME(rs.getDate("KEY_EXPIRE_TIME"));
+				vo.setREPAIR_TIME(rs.getDate("REPAIR_TIME"));
 				vo.setBODYSHOP_ID(rs.getString("BODYSHOP_ID"));
 				list.add(vo);
 			}
@@ -76,7 +76,6 @@ public class ClientDAO {
 		String sql = null;
 
 		try {
-
 			sql = "SELECT * FROM client where client_id = ? and password = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
@@ -113,50 +112,7 @@ public class ClientDAO {
 		}
 		return vo;
 	}
-	public BodyShopVO bodyshoplogin(String id, String pw) {
-
-		BodyShopVO vo = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String sql = null;
-
-		try {
-			sql = "SELECT * FROM bodyshop where body_id = ? and body_pw = ?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, id);
-			pstmt.setString(2, pw);
-			rs = pstmt.executeQuery();
-			
-			while (rs.next()) {
-				vo = new BodyShopVO();
-				vo.setBodyshop_num(rs.getString("BODYSHOP_NUM"));
-				vo.setAddress(rs.getString("ADDRESS"));
-				vo.setLatitude(rs.getString("LATITUDE"));
-				vo.setLongitude(rs.getString("LONGITUDE"));
-				vo.setBody_pw(rs.getString("BODY_PW"));
-				vo.setBody_id(rs.getString("BODY_ID"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-				}
-
-			}
-			if (con != null) {
-				try {
-					System.out.println("login 연결 끊기 성공");
-					con.close();
-				} catch (SQLException e) {
-					System.out.println("login 연결 끊기 실패");
-				}
-			}
-		}
-		return vo;
-	}
+	
 	public boolean register(ClientVO vo) {
 		boolean flag = false;
 		PreparedStatement pstmt = null;
@@ -196,5 +152,6 @@ public class ClientDAO {
 		}
 		return flag;
 	}
+
 
 }
