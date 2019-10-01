@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dto.BodyShopVO;
 import dto.ClientVO;
 import dto.ReservationVO;
 
@@ -112,44 +113,88 @@ public class ClientDAO {
 		}
 		return vo;
 	}
+	public BodyShopVO bodyshoplogin(String id, String pw) {
 
-//	public boolean register(ClientVO vo) {
-//		boolean flag = false;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//
-//		String sql = "INSERT INTO CLIENT (CLIENT_ID,CLIENT_NUM,CLIENT_NAME,CAR_TYPE,CAR_ID,TEL,PASSWORD) ;
-//		try {
-//			pstmt = con.prepareStatement(sql);
-//
-//			rs = pstmt.executeQuery();
-//			while (rs.next()) {
-//				vo.setCLIENT_ID(rs.getString("client_id"));
-//				vo.setCLIENT_NUM(rs.getString("client_num"));
-//				vo.setCLIENT_NAME(rs.getString("client_name"));
-//				vo.setCAR_TYPE(rs.getString("car_type"));
-//				vo.setCAR_ID(rs.getString("car_id"));
-//				vo.setTEL(rs.getString("tel"));
-//				vo.setPASSWORD(rs.getString("password"));
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			if (pstmt != null)
-//				try {
-//					pstmt.close();
-//				} catch (SQLException e) {
-//				}
-//			if (con != null) {
-//				try {
-//					System.out.println("login 연결 끊기 성공");
-//					con.close();
-//				} catch (SQLException e) {
-//					System.out.println("login 연결 끊기 실패");
-//				}
-//
-//			}
-//		}
-//		return flag;
-//	}
+		BodyShopVO vo = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+
+		try {
+			sql = "SELECT * FROM bodyshop where body_id = ? and body_pw = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, pw);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				vo = new BodyShopVO();
+				vo.setBodyshop_num(rs.getString("BODYSHOP_NUM"));
+				vo.setAddress(rs.getString("ADDRESS"));
+				vo.setLatitude(rs.getString("LATITUDE"));
+				vo.setLongitude(rs.getString("LONGITUDE"));
+				vo.setBody_pw(rs.getString("BODY_PW"));
+				vo.setBody_id(rs.getString("BODY_ID"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+
+			}
+			if (con != null) {
+				try {
+					System.out.println("login 연결 끊기 성공");
+					con.close();
+				} catch (SQLException e) {
+					System.out.println("login 연결 끊기 실패");
+				}
+			}
+		}
+		return vo;
+	}
+	public boolean register(ClientVO vo) {
+		boolean flag = false;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		String sql = "INSERT INTO CLIENT (CLIENT_ID,CLIENT_NUM,CLIENT_NAME,CAR_TYPE,CAR_ID,TEL,PASSWORD) "
+				+ "VALUES('mins1011',2, '황민승','BMW','34마1245', '01054697452','1111')" ;
+		try {
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				vo.setCLIENT_ID(rs.getString("client_id"));
+				vo.setCLIENT_NUM(rs.getString("client_num"));
+				vo.setCLIENT_NAME(rs.getString("client_name"));
+				vo.setCAR_TYPE(rs.getString("car_type"));
+				vo.setCAR_ID(rs.getString("car_id"));
+				vo.setTEL(rs.getString("tel"));
+				vo.setPASSWORD(rs.getString("password"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			if (con != null) {
+				try {
+					System.out.println("login 연결 끊기 성공");
+					con.close();
+				} catch (SQLException e) {
+					System.out.println("login 연결 끊기 실패");
+				}
+			}
+		}
+		return flag;
+	}
+
 }
