@@ -1,4 +1,4 @@
-package controller.reserve;
+package controller.member;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,12 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dto.ClientVO;
-import dto.ReservationListVO;
-import service.BodyshopService;
-import service.ClientService;
+import dto.ReservationVO;
+import service.MemberService;
 
-@WebServlet("/rlist")
+@WebServlet("/rlist.do")
 public class ReserveListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -28,12 +26,11 @@ public class ReserveListServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/plain; charset=utf8");
 		String id = request.getParameter("id");
-		
 		PrintWriter out = response.getWriter();
-		BodyshopService service = new BodyshopService();
+		MemberService service = new MemberService();
 		ObjectMapper mapper = new ObjectMapper();
 
-		List<ReservationListVO> res = service.getReserveList(id);
+		List<ReservationVO> res = service.getMemberList(id);
 
 		String json = mapper.writeValueAsString(res);
 		System.out.println(json);

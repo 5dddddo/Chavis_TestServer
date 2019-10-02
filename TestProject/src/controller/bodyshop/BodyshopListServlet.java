@@ -1,4 +1,4 @@
-package controller.client;
+package controller.bodyshop;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,26 +12,28 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dto.ClientVO;
-import dto.ReservationVO;
-import service.ClientService;
+import dto.ReservationListVO;
+import service.BodyshopService;
 
-@WebServlet("/register")
-public class RegisterServlet extends HttpServlet {
+@WebServlet("/blist.do")
+public class BodyshopListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public RegisterServlet() {
+	public BodyshopListServlet() {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/plain; charset=utf8");
+		String id = request.getParameter("id");
 		PrintWriter out = response.getWriter();
-		String json = request.getParameter("json");
-
-		ClientService service = new ClientService();
+		BodyshopService service = new BodyshopService();
 		ObjectMapper mapper = new ObjectMapper();
-		ClientVO vo = mapper.readValue(json, ClientVO.class);
+
+		List<ReservationListVO> res = service.getReserveList(id);
+		String json = mapper.writeValueAsString(res);
+		System.out.println(json);
+		out.println(json);
 
 		// 데이터 보내기
 		out.flush();

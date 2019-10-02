@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.BodyShopVO;
-import dto.ClientVO;
+import dto.MemberVO;
 import dto.ReservationListVO;
 import dto.ReservationVO;
 
@@ -33,20 +33,21 @@ public class ReservationDAO {
 		String sql = null;
 
 		try {
-			sql = "SELECT * FROM bodyshop where body_id = ? and body_pw = ?";
+			sql = "SELECT * FROM bodyshop where bodyshop_id = ? and bodyshop_pw = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
 			rs = pstmt.executeQuery();
-			
+		
 			while (rs.next()) {
 				vo = new BodyShopVO();
-				vo.setBodyshop_num(rs.getString("BODYSHOP_NUM"));
-				vo.setAddress(rs.getString("ADDRESS"));
-				vo.setLatitude(rs.getString("LATITUDE"));
-				vo.setLongitude(rs.getString("LONGITUDE"));
-				vo.setBody_pw(rs.getString("BODY_PW"));
-				vo.setBody_id(rs.getString("BODY_ID"));
+				vo.setBodyshop_no(rs.getInt("bodyshop_no"));
+				vo.setBodyshop_id(rs.getString("bodyshop_id"));
+				vo.setBodyshop_pw(rs.getString("bodyshop_pw"));
+				vo.setBodyshop_name(rs.getString("bodyshop_name"));
+				vo.setBodyshop_address(rs.getString("bodyshop_address"));
+				vo.setBodyshop_lat(rs.getString("bodyshop_lat"));
+				vo.setBodyshop_long(rs.getString("bodyshop_long"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,20 +79,22 @@ public class ReservationDAO {
 		String sql = null;
 	
 		try {
-			sql = "SELECT KEY, CLIENT_NAME, CAR_TYPE, RESERVE_TIME, REPAIR_TIME "
-					+ "FROM CLIENT JOIN reservation on CLIENT.client_NUM = reservation.CLIENT_ID "
-					+ "where client_NUM = ?";
+			sql = "SELECT key,key_expire_time,member_mname,car_type,car_id,reservation_time,repaired_time,repaired_person "
+					+ "FROM member join reservation on member.member_no = reservation.member_no "
+					+ "join car on member.member_no =  car.car_no where member_id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
 				ReservationListVO vo = new ReservationListVO();
-				vo.setKey(rs.getString("KEY"));
-				vo.setClient_name(rs.getString("client_name"));
+				vo.setKey(rs.getString("key"));
+				vo.setKey_expire_time(rs.getString("key_expire_time"));
+				vo.setMember_mname(rs.getString("member_mname"));
 				vo.setCar_type(rs.getString("car_type"));
-				vo.setReserve_time(rs.getString("reserve_time"));
-				vo.setRepair_time(rs.getString("repair_time"));
+				vo.setRepaired_person(rs.getString("repaired_person"));
+				vo.setReservation_time(rs.getString("reservation_time"));
+				vo.setRepaired_time(rs.getString("repaired_time"));
 				list.add(vo);
 			}
 		} catch (Exception e) {
@@ -102,7 +105,6 @@ public class ReservationDAO {
 					pstmt.close();
 				} catch (SQLException e) {
 				}
-
 			}
 			if (con != null) {
 				try {

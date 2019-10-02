@@ -1,71 +1,71 @@
 package dto;
-
-
 public class BodyShopVO {
-    String bodyshop_num;
-    String address;
-    String latitude;
-    String longitude;
-    String body_pw;
-    String body_id;
-
-    public BodyShopVO() {
-    }
-
-    public BodyShopVO(String bodyshop_num, String address, String latitude, String longitude, String body_pw, String body_id) {
-        this.bodyshop_num = bodyshop_num;
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.body_pw = body_pw;
-        this.body_id = body_id;
-    }
-
-    public String getBodyshop_num() {
-        return bodyshop_num;
-    }
-
-    public void setBodyshop_num(String bodyshop_num) {
-        this.bodyshop_num = bodyshop_num;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getBody_pw() {
-        return body_pw;
-    }
-
-    public void setBody_pw(String body_pw) {
-        this.body_pw = body_pw;
-    }
-
-    public String getBody_id() {
-        return body_id;
-    }
-
-    public void setBody_id(String body_id) {
-        this.body_id = body_id;
-    }
+   
+   private int bodyshop_no;
+   private String bodyshop_id;
+   private String bodyshop_pw;
+   private String bodyshop_name;
+   private String bodyshop_address;
+   private String bodyshop_lat;
+   private String bodyshop_long;
+   
+   
+   public BodyShopVO() {
+      super();
+   }
+   public BodyShopVO(int bodyshop_no, String bodyshop_id, String bodyshop_pw, String bodyshop_name,
+         String bodyshop_address, String bodyshop_lat, String bodyshop_long) {
+      super();
+      this.bodyshop_no = bodyshop_no;
+      this.bodyshop_id = bodyshop_id;
+      this.bodyshop_pw = bodyshop_pw;
+      this.bodyshop_name = bodyshop_name;
+      this.bodyshop_address = bodyshop_address;
+      this.bodyshop_lat = bodyshop_lat;
+      this.bodyshop_long = bodyshop_long;
+   }
+   public int getBodyshop_no() {
+      return bodyshop_no;
+   }
+   public void setBodyshop_no(int bodyshop_no) {
+      this.bodyshop_no = bodyshop_no;
+   }
+   public String getBodyshop_id() {
+      return bodyshop_id;
+   }
+   public void setBodyshop_id(String bodyshop_id) {
+      this.bodyshop_id = bodyshop_id;
+   }
+   public String getBodyshop_pw() {
+      return bodyshop_pw;
+   }
+   public void setBodyshop_pw(String bodyshop_pw) {
+      this.bodyshop_pw = bodyshop_pw;
+   }
+   public String getBodyshop_name() {
+      return bodyshop_name;
+   }
+   public void setBodyshop_name(String bodyshop_name) {
+      this.bodyshop_name = bodyshop_name;
+   }
+   public String getBodyshop_address() {
+      return bodyshop_address;
+   }
+   public void setBodyshop_address(String bodyshop_address) {
+      this.bodyshop_address = bodyshop_address;
+   }
+   public String getBodyshop_lat() {
+      return bodyshop_lat;
+   }
+   public void setBodyshop_lat(String bodyshop_lat) {
+      this.bodyshop_lat = bodyshop_lat;
+   }
+   public String getBodyshop_long() {
+      return bodyshop_long;
+   }
+   public void setBodyshop_long(String bodyshop_long) {
+      this.bodyshop_long = bodyshop_long;
+   }
+   
+   
 }

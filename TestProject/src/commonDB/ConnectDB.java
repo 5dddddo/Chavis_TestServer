@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import dto.ClientVO;
+import dto.MemberVO;
 
 public class ConnectDB {
 	private static ConnectDB instance = new ConnectDB();
@@ -34,7 +34,7 @@ public class ConnectDB {
 		return con;
 	}
 
-	public ClientVO Login(String id, String pw) {
+	public MemberVO Login(String id, String pw) {
 		return null;
 	}
 

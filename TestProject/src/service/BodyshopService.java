@@ -4,12 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import dao.ClientDAO;
 import dao.ReservationDAO;
 import dto.BodyShopVO;
-import dto.ClientVO;
 import dto.ReservationListVO;
-import dto.ReservationVO;
 
 // service 객체를 만들기 위한 class
 public class BodyshopService {
@@ -24,7 +21,7 @@ public class BodyshopService {
 			if (vo != null) {
 				con.commit();
 			} else {
-				vo.setBodyshop_num("0");
+				vo.setBodyshop_id("NO");
 				con.rollback();
 			}
 		} catch (Exception e) {
@@ -38,6 +35,7 @@ public class BodyshopService {
 		}
 		return vo;
 	}
+
 	public List<ReservationListVO> getReserveList(String id) {
 		Connection con = null;
 		List<ReservationListVO> list = null;

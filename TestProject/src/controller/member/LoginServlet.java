@@ -1,4 +1,4 @@
-package controller.reserve;
+package controller.member;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,16 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dto.BodyShopVO;
-import dto.ClientVO;
-import service.BodyshopService;
-import service.ClientService;
+import dto.MemberVO;
+import service.MemberService;
 
-@WebServlet("/blogin")
-public class BodyshopLoginServlet extends HttpServlet {
+@WebServlet("/clogin.do")
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public BodyshopLoginServlet() {
+	public LoginServlet() {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -30,14 +28,17 @@ public class BodyshopLoginServlet extends HttpServlet {
 		String id = request.getParameter("id");
 		String pw = request.getParameter("pw");
 		System.out.println(id + "  " + pw);
-		
-		BodyshopService service = new BodyshopService();
+		MemberService service = new MemberService();
 		ObjectMapper mapper = new ObjectMapper();
-		BodyShopVO res = service.bodyshoplogin(id, pw);
+
+		MemberVO res = service.login(id, pw);
+
 		String json = mapper.writeValueAsString(res);
 		System.out.println(json);
 		out.println(json);
 
+//		ObjectMapper mapper = new ObjectMapper();
+//		String json = mapper.writeValueAsString(result);
 
 		// 데이터 보내기
 		out.flush();
@@ -45,5 +46,4 @@ public class BodyshopLoginServlet extends HttpServlet {
 		out.close();
 
 	}
-
 }

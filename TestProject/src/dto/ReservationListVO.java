@@ -1,22 +1,28 @@
 package dto;
 
 public class ReservationListVO {
-    String key;
-    String client_name;
-    String car_type;
-    String reserve_time;
-    String repair_time;
+	private String key;
+	private String key_expire_time;
+	private String member_mname;
+	private String car_type;
+	private String car_id;
+	private String reservation_time;
+	private String repaired_time;
+	private String repaired_person;
 
-    public ReservationListVO() {
-    }
+	public ReservationListVO() {
+	}
 
-	public ReservationListVO(String key, String client_name, String car_type, String reserve_time, String repair_time) {
-		super();
+	public ReservationListVO(String key, String key_expire_time, String member_mname, String car_type, String car_id,
+			String reservation_time, String repaired_time, String repaired_person) {
 		this.key = key;
-		this.client_name = client_name;
+		this.key_expire_time = key_expire_time;
+		this.member_mname = member_mname;
 		this.car_type = car_type;
-		this.reserve_time = reserve_time;
-		this.repair_time = repair_time;
+		this.car_id = car_id;
+		this.reservation_time = reservation_time;
+		this.repaired_time = repaired_time;
+		this.repaired_person = repaired_person;
 	}
 
 	public String getKey() {
@@ -27,12 +33,20 @@ public class ReservationListVO {
 		this.key = key;
 	}
 
-	public String getClient_name() {
-		return client_name;
+	public String getKey_expire_time() {
+		return key_expire_time;
 	}
 
-	public void setClient_name(String client_name) {
-		this.client_name = client_name;
+	public void setKey_expire_time(String key_expire_time) {
+		this.key_expire_time = key_expire_time;
+	}
+
+	public String getMember_mname() {
+		return member_mname;
+	}
+
+	public void setMember_mname(String member_mname) {
+		this.member_mname = member_mname;
 	}
 
 	public String getCar_type() {
@@ -43,20 +57,35 @@ public class ReservationListVO {
 		this.car_type = car_type;
 	}
 
-	public String getReserve_time() {
-		return reserve_time;
+	public String getCar_id() {
+		return car_id;
 	}
 
-	public void setReserve_time(String reserve_time) {
-		this.reserve_time = reserve_time;
+	public void setCar_id(String car_id) {
+		this.car_id = car_id;
 	}
 
-	public String getRepair_time() {
-		return repair_time;
+	public String getReservation_time() {
+		return reservation_time;
 	}
 
-	public void setRepair_time(String repair_time) {
-		this.repair_time = repair_time;
+	public void setReservation_time(String reservation_time) {
+		this.reservation_time = reservation_time;
 	}
 
+	public String getRepaired_time() {
+		return repaired_time;
+	}
+
+	public void setRepaired_time(String repaired_time) {
+		this.repaired_time = repaired_time;
+	}
+
+	public String getRepaired_person() {
+		return repaired_person;
+	}
+
+	public void setRepaired_person(String repaired_person) {
+		this.repaired_person = repaired_person;
+	}
 }

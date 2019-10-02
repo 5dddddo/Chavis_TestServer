@@ -1,4 +1,4 @@
-package controller.client;
+package controller.member;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dto.ClientVO;
+import dto.MemberVO;
 import dto.ReservationVO;
-import service.ClientService;
+import service.MemberService;
 
 @WebServlet("/clist.do")
 public class ListServlet extends HttpServlet {
@@ -28,9 +28,8 @@ public class ListServlet extends HttpServlet {
 		response.setContentType("text/plain; charset=utf8");
 		PrintWriter out = response.getWriter();
 		String id = request.getParameter("id");
-		ClientService service = new ClientService();
+		MemberService service = new MemberService();
 		ObjectMapper mapper = new ObjectMapper();
-
 		List<ReservationVO> res = service.getClientList(id);
 
 		String json = mapper.writeValueAsString(res);

@@ -1,6 +1,3 @@
-// connection을 공용으로 사용해서 service가 transaction 단위로 동작
-// dao에 있던 connection 코드를 service로 옮김
-
 package dao;
 
 import java.sql.Connection;
@@ -10,21 +7,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dto.BodyShopVO;
-import dto.ClientVO;
+import dto.MemberVO;
 import dto.ReservationVO;
 
-public class ClientDAO {
+public class MemberDAO {
 
 	// 하나의 Transaction으로 동작하기 위해
 	// 멤버 변수로 Connection을 선언하고 이 Connection을 공유하여 사용
 	private Connection con;
 
-	public ClientDAO(Connection con) {
+	public MemberDAO(Connection con) {
 		this.con = con;
 	}
 
-	public List<ReservationVO> getClientList(String keyword) {
+	public List<ReservationVO> getMemberList(String keyword) {
 		// keyword를 입력 받아서 DB 검색해서
 		// String[] 만들어서 return 해주는 DB 처리
 		// logic 나오면 안 됨!
@@ -40,22 +36,25 @@ public class ClientDAO {
 			// 사용자가 늘어나도 load가 커지지 않음
 
 			// 3. Statement 생성
-			String sql = "SELECT * FROM RESERVATION WHERE CLIENT_ID = ? ORDER BY reserve_id";
+			String sql = "SELECT reservation_no, bodyshop_no, repaired_person, reservation_time, repaired_time, key "
+					+ "FROM RESERVATION JOIN MEMBER ON RESERVATION.member_no = MEMBER.member_no "
+					+ "WHERE MEMBER.member_no = "
+					+ "(select member_no from member where member_id= ?)"
+					+ " ORDER BY reservation_no";
 			PreparedStatement pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, keyword);
+			pstmt.setString(1,keyword);
 			// 4. Query 설정
 			ResultSet rs = pstmt.executeQuery();
 
 			// 5. 결과 처리
 			while (rs.next()) {
 				ReservationVO vo = new ReservationVO();
-				vo.setRESERVE_ID(rs.getString("RESERVE_ID"));
-				vo.setCLIENT_ID(rs.getString("CLIENT_ID"));
-				vo.setKEY(rs.getString("KEY"));
-				vo.setRESERVE_TIME(rs.getDate("RESERVE_TIME"));
-				vo.setKEY_EXPIRE_TIME(rs.getDate("KEY_EXPIRE_TIME"));
-				vo.setREPAIR_TIME(rs.getDate("REPAIR_TIME"));
-				vo.setBODYSHOP_ID(rs.getString("BODYSHOP_ID"));
+				vo.setReservation_no(rs.getInt("reservation_no"));
+				vo.setBodyshop_no(rs.getInt("bodyshop_no"));
+				vo.setKey(rs.getString("key"));
+				vo.setReservation_time(rs.getString("reservation_time"));
+				vo.setRepaired_time(rs.getString("repaired_time"));
+				vo.setRepaired_person(rs.getString("repaired_person"));
 				list.add(vo);
 			}
 			// 6. 사용한 resource 해제
@@ -68,28 +67,27 @@ public class ClientDAO {
 		return list;
 	}
 
-	public ClientVO login(String id, String pw) {
+	public MemberVO login(String id, String pw) {
 
-		ClientVO vo = null;
+//      Map<String, String> vo = new HashMap<String, String>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
+		MemberVO vo = null;
 
 		try {
-			sql = "SELECT * FROM client where client_id = ? and password = ?";
+			sql = "SELECT * FROM member where member_id = ? and member_pw = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				vo = new ClientVO();
-				vo.setCLIENT_ID(rs.getString("client_id"));
-				vo.setCLIENT_NUM(rs.getString("client_num"));
-				vo.setCLIENT_NAME(rs.getString("client_name"));
-				vo.setCAR_TYPE(rs.getString("car_type"));
-				vo.setCAR_ID(rs.getString("car_id"));
-				vo.setTEL(rs.getString("tel"));
-				vo.setPASSWORD(rs.getString("password"));
+				vo = new MemberVO();
+				vo.setMember_no(rs.getInt("member_no"));
+				vo.setMember_id(rs.getString("member_id"));
+				vo.setMember_pw(rs.getString("member_pw"));
+				vo.setMember_mname(rs.getString("member_mname"));
+				vo.setMember_phonenumber(rs.getString("member_phonenumber"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,26 +110,23 @@ public class ClientDAO {
 		}
 		return vo;
 	}
-	
-	public boolean register(ClientVO vo) {
+
+	public boolean register(MemberVO vo) {
 		boolean flag = false;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "INSERT INTO CLIENT (CLIENT_ID,CLIENT_NUM,CLIENT_NAME,CAR_TYPE,CAR_ID,TEL,PASSWORD) "
-				+ "VALUES('mins1011',2, '황민승','BMW','34마1245', '01054697452','1111')" ;
+		String sql = "INSERT INTO MEMBER (MEMBER_NO,MEMBER_ID,MEMBER_PW,MEMBER_MNAME,MEMBER_PHONENUMBER) "
+				+ "VALUES(MEMBER_NO_SEQUENCE.nextval-1 ,?,?,?,?)";
 		try {
 			pstmt = con.prepareStatement(sql);
-
+			pstmt.setString(1, vo.getMember_id());
+			pstmt.setString(2, vo.getMember_pw());
+			pstmt.setString(3, vo.getMember_mname());
+			pstmt.setString(4, vo.getMember_phonenumber());
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				vo.setCLIENT_ID(rs.getString("client_id"));
-				vo.setCLIENT_NUM(rs.getString("client_num"));
-				vo.setCLIENT_NAME(rs.getString("client_name"));
-				vo.setCAR_TYPE(rs.getString("car_type"));
-				vo.setCAR_ID(rs.getString("car_id"));
-				vo.setTEL(rs.getString("tel"));
-				vo.setPASSWORD(rs.getString("password"));
+				System.out.println("rs : " + rs);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -152,6 +147,5 @@ public class ClientDAO {
 		}
 		return flag;
 	}
-
 
 }
