@@ -21,8 +21,10 @@ public class BodyshopService {
 			if (vo != null) {
 				con.commit();
 			} else {
-				vo.setBodyshop_id("NO");
+				BodyShopVO temp = new BodyShopVO();
+				temp.setBodyshop_id("NO");
 				con.rollback();
+				return temp;
 			}
 		} catch (Exception e) {
 			System.out.println(e);

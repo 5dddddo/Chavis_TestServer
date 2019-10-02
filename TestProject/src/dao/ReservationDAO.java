@@ -81,9 +81,9 @@ public class ReservationDAO {
 		try {
 			sql = "SELECT key,key_expire_time,member_mname,car_type,car_id,reservation_time,repaired_time,repaired_person "
 					+ "FROM member join reservation on member.member_no = reservation.member_no "
-					+ "join car on member.member_no =  car.car_no where member_id = ?";
+					+ "join car on member.member_no =  car.car_no where bodyshop_no = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, id);
+			pstmt.setInt(1,Integer.parseInt(id));
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
