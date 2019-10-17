@@ -38,11 +38,10 @@ public class MemberDAO {
 			// 3. Statement 생성
 			String sql = "SELECT reservation_no, bodyshop_no, repaired_person, reservation_time, repaired_time, key "
 					+ "FROM RESERVATION JOIN MEMBER ON RESERVATION.member_no = MEMBER.member_no "
-					+ "WHERE MEMBER.member_no = "
-					+ "(select member_no from member where member_id= ?)"
-					+ " ORDER BY reservation_no";
+					+ "WHERE MEMBER.member_no = " + "(select member_no from member where member_id= ?)"
+					+ " ORDER BY reservation_no desc";
 			PreparedStatement pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,keyword);
+			pstmt.setString(1, keyword);
 			// 4. Query 설정
 			ResultSet rs = pstmt.executeQuery();
 
@@ -76,7 +75,9 @@ public class MemberDAO {
 		MemberVO vo = null;
 
 		try {
-			sql = "SELECT * FROM member where member_id = ? and member_pw = ?";
+			sql = "SELECT member.member_no,member_id,member_pw,member_mname,member_phonenumber,car.car_no,car_id,car_type "
+					+ "FROM member join car on member.member_no = car.member_no "
+					+ "where member_id = ? and member_pw = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
@@ -88,6 +89,9 @@ public class MemberDAO {
 				vo.setMember_pw(rs.getString("member_pw"));
 				vo.setMember_mname(rs.getString("member_mname"));
 				vo.setMember_phonenumber(rs.getString("member_phonenumber"));
+				vo.setCar_no(rs.getInt("car_no"));
+				vo.setCar_id(rs.getString("car_id"));
+				vo.setCar_type(rs.getString("car_type"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,22 +116,38 @@ public class MemberDAO {
 	}
 
 	public boolean register(MemberVO vo) {
-		boolean flag = false;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 
-		String sql = "INSERT INTO MEMBER (MEMBER_NO,MEMBER_ID,MEMBER_PW,MEMBER_MNAME,MEMBER_PHONENUMBER) "
-				+ "VALUES(MEMBER_NO_SEQUENCE.nextval-1 ,?,?,?,?)";
+		boolean flag = true;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+		ResultSet rs2 = null;
+
+		String sql = "insert into member (member_no, member_id, member_pw, member_mname,member_phonenumber)"
+				+ " values ((select nvl(max(member_no),0)+1 from member)," + "?, ?, ?, ?)";
+		String sql2 = "insert into car (car_no,car_type,car_id,member_no) values "
+				+ "((select nvl(max(car_no),0)+1 from car), ?, ?,?,(select nvl(max(member_no),0) from member))";
+
 		try {
+			System.out.println("연결됨");
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getMember_id());
 			pstmt.setString(2, vo.getMember_pw());
 			pstmt.setString(3, vo.getMember_mname());
 			pstmt.setString(4, vo.getMember_phonenumber());
 			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				System.out.println("rs : " + rs);
+			if (rs.next()) {
+				pstmt2 = con.prepareStatement(sql2);
+				pstmt2.setString(1, vo.getCar_type());
+				pstmt2.setString(2, vo.getCar_id());
+				pstmt2.setString(3, vo.getCar_color());
+				
+				rs2 = pstmt2.executeQuery();
+				if (rs2.next())
+					flag = true;
+
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -138,10 +158,43 @@ public class MemberDAO {
 				}
 			if (con != null) {
 				try {
-					System.out.println("login 연결 끊기 성공");
+					System.out.println("register 연결 끊기 성공");
 					con.close();
 				} catch (SQLException e) {
-					System.out.println("login 연결 끊기 실패");
+					System.out.println("register 연결 끊기 실패");
+				}
+			}
+		}
+		return flag;
+	}
+
+	public boolean idcheck(String id) {
+		boolean flag = false;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		String sql = "select member_id from member where member_id = ?";
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				flag = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			if (con != null) {
+				try {
+					System.out.println("idcheck 연결 끊기 성공");
+					con.close();
+				} catch (SQLException e) {
+					System.out.println("idcheck 연결 끊기 실패");
 				}
 			}
 		}

@@ -83,4 +83,33 @@ public class MemberService {
 		return flag;
 	}
 
+	public boolean idcheck(String id) {
+		Connection con = null;
+		boolean flag = false;
+		try {
+			con = commonDB.ConnectDB.getConnection();
+			MemberDAO dao = new MemberDAO(con);
+			flag = dao.idcheck(id);
+			if (flag == true) {
+				con.commit();
+			} else {
+				con.rollback();
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				System.out.println(e);
+			}
+		}
+		return flag;
+	}
+
+	public List<ReservationVO> getClientList(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

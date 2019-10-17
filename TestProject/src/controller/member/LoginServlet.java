@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dto.BodyShopVO;
 import dto.MemberVO;
-import service.BodyshopService;
 import service.MemberService;
 
 @WebServlet("/clogin.do")
@@ -41,8 +39,8 @@ public class LoginServlet extends HttpServlet {
 		System.out.println(sb.toString());
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, String> map = mapper.readValue(sb.toString(), Map.class);
-		String id = map.get("id");
-		String pw = map.get("pw");
+		String id = map.get("member_id");
+		String pw = map.get("member_pw");
 		MemberService service = new MemberService();
 		MemberVO vo = service.login(id, pw);
 		input = mapper.writeValueAsString(vo);
